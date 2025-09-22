@@ -1,7 +1,7 @@
 const apiKey = "efbb10bb837f1faa8146ccffcf173213";
 const baseUrl = "https://api.themoviedb.org/3";
 const picturesBaseUrl = "https://image.tmdb.org/t/p";
-async function fetchMovies(page = 1) {
+export async function fetchMovies(page = 1) {
   try {
     const res = await fetch(
       `${baseUrl}/movie/top_rated?page=${page}&api_key=${apiKey}`
@@ -13,7 +13,7 @@ async function fetchMovies(page = 1) {
     return false;
   }
 }
-async function searchMovies(query, page = 1) {
+export async function searchMovies(query, page = 1) {
   try {
     const res = await fetch(
       `${baseUrl}/search/movie/?query=${encodeURIComponent(
@@ -27,7 +27,7 @@ async function searchMovies(query, page = 1) {
     return false;
   }
 }
-async function findById(query) {
+export async function findById(query) {
   try {
     const res = await fetch(`${baseUrl}/movie/${query}?api_key=${apiKey}`);
     if (!res.ok) throw new Error("API error");
@@ -37,7 +37,7 @@ async function findById(query) {
     return false;
   }
 }
-async function movieImages(query) {
+export async function movieImages(query) {
   try {
     const res = await fetch(
       `${baseUrl}/movie/images${query}?api_key=${apiKey}`
@@ -49,7 +49,7 @@ async function movieImages(query) {
     return false;
   }
 }
-async function genreList() {
+export async function genreList() {
   try {
     const res = await fetch(`${baseUrl}/genre/movie/list?api_key=${apiKey}`);
     if (!res.ok) throw new Error("API error");
@@ -59,7 +59,7 @@ async function genreList() {
     return false;
   }
 }
-async function fetchCasts(query) {
+export async function fetchCasts(query) {
   try {
     const res = await fetch(
       `${baseUrl}/movie/${query}/credits?api_key=${apiKey}`
@@ -71,7 +71,7 @@ async function fetchCasts(query) {
     return false;
   }
 }
-async function fetchPictures(query) {
+export async function fetchPictures(query) {
   try {
     const res = await fetch(`${picturesBaseUrl}/original/${query}`);
     if (!res.ok) throw new Error("API error");
@@ -81,7 +81,7 @@ async function fetchPictures(query) {
     return false;
   }
 }
-async function fetchPicturesLowQuality(query) {
+export async function fetchPicturesLowQuality(query) {
   try {
     const res = await fetch(`${picturesBaseUrl}/w500/${query}`);
     if (!res.ok) throw new Error("API error");
