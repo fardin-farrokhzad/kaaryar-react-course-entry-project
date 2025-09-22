@@ -16,7 +16,7 @@ export async function fetchMovies(page = 1) {
 export async function searchMovies(query, page = 1) {
   try {
     const res = await fetch(
-      `${baseUrl}/search/movie/?query=${encodeURIComponent(
+      `${baseUrl}/search/movie?query=${encodeURIComponent(
         query
       )}&include_adult=false&language=en-US&${page}&api_key=${apiKey}`
     );
