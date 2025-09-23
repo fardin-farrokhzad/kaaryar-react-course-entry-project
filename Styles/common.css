@@ -14,7 +14,7 @@
 /*header*/
 header {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 15px 30px;
@@ -25,15 +25,20 @@ header {
 }
 
 .logo img {
-  height: 50px;
+  height: 45px;
   width: auto;
 }
 
 /*search*/
 .search-container {
-  position: relative;
   flex: 1;
   max-width: 55rem;
+  display: flex;
+  flex-direction: column;
+}
+.search-inner {
+  position: relative;
+  width: 100%;
 }
 
 .dropdown-button {
@@ -81,6 +86,18 @@ header {
   opacity: 1;
 }
 
+.search-error {
+  color: #ff4d4d;
+  font-size: 0.9rem;
+  padding-top: 15px;
+  min-height: 1rem;
+  visibility: hidden;
+}
+
+.search-error.show {
+  visibility: visible;
+}
+
 .autocomplete-suggestions {
   position: absolute;
   top: 100%;
@@ -120,9 +137,12 @@ header {
   gap: 1rem;
   padding: 10px 0;
 }
+
 /*dropdown*/
 .dropdown {
+  margin-top: 0.5rem;
   position: relative;
+  align-self: start;
 }
 
 .dropdown-button {
@@ -187,7 +207,8 @@ header {
   }
 
   .logo img {
-    height: 40px;
+    height: 50px;
+    margin: 5px;
   }
 
   .dropdown,
@@ -211,6 +232,7 @@ header {
     border-bottom: 1px solid #333;
   }
 }
+
 .movies {
   width: 100%;
   padding: 2rem 4rem;
@@ -220,6 +242,7 @@ header {
   gap: 30px;
   align-items: center;
 }
+
 .movie-wrapper {
   max-width: 300px;
   min-height: 450px;
@@ -233,37 +256,45 @@ header {
   overflow: hidden;
   border-radius: 15px;
 }
+
 .movie-wrapper .title {
   font-weight: 700;
   font-size: 1.3rem;
 }
+
 .movie-wrapper figure {
   margin: -25px;
   max-width: 300px;
   max-height: 600px;
   margin-bottom: 8px;
 }
+
 .movie-wrapper figure img {
   width: 100%;
   height: auto;
 }
+
 .movie-wrapper .info-wrapper {
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
+
 .movie-wrapper .rating {
   display: inline-flex;
   justify-self: center;
   align-items: center;
   gap: 4px;
 }
+
 .movie-wrapper .rating img {
   width: 1rem;
 }
+
 .movie-wrapper .rating span {
   padding-top: 5px;
 }
+
 .movie-wrapper .info-wrapper a {
   color: #1c97ff;
   text-decoration: none;
@@ -272,15 +303,18 @@ header {
   border-radius: 15px;
   transition: 0.5s ease;
 }
+
 .movie-wrapper .info-wrapper a:hover {
   opacity: 0.7;
 }
+
 footer {
   padding: 45px 20px 30px;
   text-align: center;
   font-size: 0.8rem;
   font-weight: lighter;
 }
+
 .pagination {
   display: flex;
   align-items: center;
@@ -368,6 +402,7 @@ footer {
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
+
 .loader::after,
 .loader::before {
   content: "";
@@ -387,6 +422,7 @@ footer {
   animation: rotationBack 0.5s linear infinite;
   transform-origin: center center;
 }
+
 .loader::before {
   width: 32px;
   height: 32px;

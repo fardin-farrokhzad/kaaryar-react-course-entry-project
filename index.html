@@ -12,11 +12,14 @@
     <header>
       <div class="logo"><img src="./Assets/IMDB_Logo.svg" alt="Logo" /></div>
       <div class="search-container">
-        <input type="text" class="search-bar" placeholder="Search..." />
-        <button class="search-button">
-          <img src="./Assets/search.png" alt="Search" />
-        </button>
-        <div class="autocomplete-suggestions"></div>
+        <div class="search-inner">
+          <input type="text" class="search-bar" placeholder="Search..." />
+          <button class="search-button">
+            <img src="./Assets/search.png" alt="Search" />
+          </button>
+          <div class="autocomplete-suggestions"></div>
+        </div>
+        <div class="search-error">Please enter at least 2 characters</div>
       </div>
       <div class="dropdown">
         <button class="dropdown-button">Genres &#x25BC;</button>
