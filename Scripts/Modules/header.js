@@ -109,7 +109,7 @@ export async function renderHeader() {
 
       // Click → go to detail page
       item.addEventListener("click", () => {
-        window.location.href = `detail.html?id=${movie.id}`;
+        window.location.href = `../../Pages/detail.html?id=${movie.id}`;
       });
 
       suggestionsContainer.appendChild(item);
@@ -158,7 +158,7 @@ export async function renderHeader() {
     dropdownMenu.innerHTML = "";
     Object.entries(genreMap).forEach(([id, name]) => {
       const a = document.createElement("a");
-      a.href = `genre.html?id=${id}`;
+      a.href = `../../Pages/genre.html?id=${id}`;
       a.textContent = name;
       dropdownMenu.appendChild(a);
     });
@@ -176,4 +176,3 @@ export async function renderHeader() {
     }
   });
 }
-renderHeader();
