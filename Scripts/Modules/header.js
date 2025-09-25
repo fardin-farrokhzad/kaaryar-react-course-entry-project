@@ -1,3 +1,6 @@
+// header.js
+// Header logic: search autocomplete, genre dropdown, user interactions
+
 import { searchMovies, fetchPicturesLowQuality, genreList } from "./api.js";
 
 export async function renderHeader() {
@@ -10,6 +13,7 @@ export async function renderHeader() {
   const dropdownButton = document.querySelector(".dropdown-button");
   const dropdownMenu = document.querySelector(".dropdown-menu");
 
+  // Check elements
   if (
     !searchBar ||
     !searchButton ||
@@ -17,7 +21,13 @@ export async function renderHeader() {
     !dropdownButton ||
     !dropdownMenu
   ) {
-    console.warn("Header elements not found.");
+    console.warn("Header elements missing:", {
+      searchBar: !!searchBar,
+      searchButton: !!searchButton,
+      suggestionsContainer: !!suggestionsContainer,
+      dropdownButton: !!dropdownButton,
+      dropdownMenu: !!dropdownMenu,
+    });
     return;
   }
 
@@ -26,88 +36,99 @@ export async function renderHeader() {
   const DEBOUNCE_MS = 250;
   const MAX_RESULTS = 8;
   const DEFAULT_IMG = "../../Assets/profile.png";
-  let debounceTimer;
+  let debounceTimer = null;
   let genreMap = {};
 
-  // Fetch genres once
-  try {
-    const gData = await genreList();
-    if (gData && Array.isArray(gData.genres)) {
-      gData.genres.forEach((g) => (genreMap[g.id] = g.name));
+  // Load genres
+  async function loadGenres() {
+    try {
+      const genreData = await genreList();
+      if (genreData && Array.isArray(genreData.genres)) {
+        genreMap = genreData.genres.reduce((map, genre) => {
+          map[genre.id] = genre.name;
+          return map;
+        }, {});
+      } else {
+        console.warn("Invalid genre data:", genreData);
+      }
+    } catch (error) {
+      console.warn("Failed to fetch genres:", error);
     }
-  } catch {
-    console.warn("Could not fetch genres");
   }
 
-  // Simple debounce helper
+  // Debounce utility
   function debounce(fn, delay) {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(fn, delay);
   }
 
-  // Get poster using API module
-  async function getPoster(posterPath) {
-    if (!posterPath) return DEFAULT_IMG;
-    const cleanPath = posterPath.replace(/^\//, "");
-    try {
-      const url = await fetchPicturesLowQuality(cleanPath);
-      return url || DEFAULT_IMG;
-    } catch {
-      return DEFAULT_IMG;
+  // Get poster URL
+  function getPoster(posterPath) {
+    const url = fetchPicturesLowQuality(posterPath);
+    if (url && typeof url === "string") {
+      return url;
     }
+    console.debug(
+      `No valid poster URL for path: ${posterPath}, using default.`
+    );
+    return DEFAULT_IMG;
   }
 
-  // Convert genre IDs to names
-  function getGenres(genre_ids = []) {
-    if (!Array.isArray(genre_ids)) return "";
-    const names = genre_ids.map((id) => genreMap[id]).filter(Boolean);
-    return names.join(", ");
+  // Genre IDs to names
+  function getGenres(genreIds = []) {
+    if (!Array.isArray(genreIds)) return "Unknown genre";
+    const names = genreIds
+      .map((id) => genreMap[id])
+      .filter(Boolean)
+      .join(", ");
+    return names || "Unknown genre";
   }
 
   // Render autocomplete suggestions
   async function renderSuggestions(results) {
     suggestionsContainer.innerHTML = "";
-    if (!results || results.length === 0) {
+    if (!results || !Array.isArray(results) || results.length === 0) {
       suggestionsContainer.style.display = "none";
+      console.debug("No search results to render.");
       return;
     }
 
+    console.debug(
+      "Search results:",
+      results.map((m) => ({ title: m.title, poster_path: m.poster_path }))
+    );
     suggestionsContainer.style.display = "block";
-    const slice = results.slice(0, MAX_RESULTS);
+    const movies = results.slice(0, MAX_RESULTS);
 
-    slice.forEach(async (movie) => {
+    movies.forEach((movie) => {
       const item = document.createElement("div");
+      item.className = "suggestion-item";
 
-      // Image container
       const imgDiv = document.createElement("div");
       imgDiv.className = "img";
       const img = document.createElement("img");
-      img.src = DEFAULT_IMG; // default
-      img.alt = movie.title;
-
-      getPoster(movie.poster_path).then((url) => {
-        img.src = url; // replace with actual poster
-      });
-
+      img.src = getPoster(movie.poster_path);
+      img.alt = movie.title || "Movie poster";
       img.onerror = () => {
-        img.src = DEFAULT_IMG; // fallback
+        console.debug(
+          `Image failed to load for ${movie.title}, using default.`
+        );
+        img.src = DEFAULT_IMG;
       };
       imgDiv.appendChild(img);
 
-      // Text container
       const txtDiv = document.createElement("div");
       txtDiv.className = "txt";
       const h3 = document.createElement("h3");
-      h3.textContent = movie.title;
+      h3.textContent = movie.title || "Untitled";
       const span = document.createElement("span");
-      span.textContent = getGenres(movie.genre_ids) || "Unknown genre";
+      span.textContent = getGenres(movie.genre_ids);
       txtDiv.appendChild(h3);
       txtDiv.appendChild(span);
 
       item.appendChild(imgDiv);
       item.appendChild(txtDiv);
 
-      // Click → go to detail page
       item.addEventListener("click", () => {
         window.location.href = `../../Pages/detail.html?id=${movie.id}`;
       });
@@ -116,61 +137,78 @@ export async function renderHeader() {
     });
   }
 
-  // Search input listener
+  await loadGenres();
+
+  // Handle search submit
+  function handleSearchSubmit() {
+    const query = searchBar.value.trim();
+    if (query) {
+      suggestionsContainer.style.display = "none";
+      window.location.href = `../../Pages/search.html?query=${encodeURIComponent(
+        query
+      )}`;
+    }
+  }
+
+  // Autocomplete input
   searchBar.addEventListener("input", () => {
-    const q = searchBar.value.trim();
-    if (q.length < MIN_CHARS) {
+    const query = searchBar.value.trim();
+    if (query.length < MIN_CHARS) {
       suggestionsContainer.style.display = "none";
       return;
     }
 
     debounce(async () => {
-      const data = await searchMovies(q);
-      if (data && Array.isArray(data.results)) {
-        await renderSuggestions(data.results);
-      } else {
+      try {
+        const data = await searchMovies(query);
+        await renderSuggestions(data?.results || []);
+      } catch (error) {
+        console.warn("Search failed:", error);
         suggestionsContainer.style.display = "none";
       }
     }, DEBOUNCE_MS);
   });
 
   // Search button
-  searchButton.addEventListener("click", () => {
-    if (searchBar.value) {
-      alert("Searching for: " + searchBar.value);
-      suggestionsContainer.style.display = "none";
+  searchButton.addEventListener("click", handleSearchSubmit);
+
+  // Enter key
+  searchBar.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSearchSubmit();
     }
   });
 
-  // Hide suggestions if clicking outside
-  document.addEventListener("click", (e) => {
+  // Hide suggestions click outside
+  document.addEventListener("click", (event) => {
     if (
-      !searchBar.contains(e.target) &&
-      !suggestionsContainer.contains(e.target) &&
-      !searchButton.contains(e.target)
+      !searchBar.contains(event.target) &&
+      !suggestionsContainer.contains(event.target) &&
+      !searchButton.contains(event.target)
     ) {
       suggestionsContainer.style.display = "none";
     }
   });
 
-  // Dropdown for genres
+  // Populate genre dropdown
   dropdownButton.addEventListener("click", () => {
     dropdownMenu.innerHTML = "";
     Object.entries(genreMap).forEach(([id, name]) => {
-      const a = document.createElement("a");
-      a.href = `../../Pages/genre.html?id=${id}`;
-      a.textContent = name;
-      dropdownMenu.appendChild(a);
+      const link = document.createElement("a");
+      link.href = `../../Pages/genre.html?id=${id}`;
+      link.textContent = name;
+      dropdownMenu.appendChild(link);
     });
     dropdownMenu.style.display =
       dropdownMenu.style.display === "block" ? "none" : "block";
   });
 
-  // Hide dropdown if clicking outside
-  document.addEventListener("click", (e) => {
+  // Hide dropdown outside click
+  document.addEventListener("click", (event) => {
     if (
-      !dropdownButton.contains(e.target) &&
-      !dropdownMenu.contains(e.target)
+      !dropdownButton.contains(event.target) &&
+      !dropdownMenu.contains(event.target)
     ) {
       dropdownMenu.style.display = "none";
     }
