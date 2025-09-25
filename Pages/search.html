@@ -10,12 +10,16 @@
   </head>
   <body>
     <header>
-      <div class="logo"><img src="./Assets/IMDB_Logo.svg" alt="Logo" /></div>
+      <div class="logo">
+        <a href="../index.html"
+          ><img src="../Assets/IMDB_Logo.svg" alt="Logo"
+        /></a>
+      </div>
       <div class="search-container">
         <div class="search-inner">
           <input type="text" class="search-bar" placeholder="Search..." />
           <button class="search-button">
-            <img src="./Assets/search.png" alt="Search" />
+            <img src="../Assets/search.png" alt="Search" />
           </button>
           <div class="autocomplete-suggestions"></div>
         </div>
@@ -43,5 +47,6 @@
       </div>
     </main>
     <footer>&copy; 2025 by Kaaryar Studio</footer>
+    <script type="module" src="../Scripts/Pages/search.js"></script>
   </body>
 </html>
