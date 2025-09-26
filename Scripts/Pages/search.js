@@ -1,9 +1,4 @@
 // search.js
-// This script powers the search results page of a movie browsing app, displaying a grid of movies
-// based on the search query from the URL (e.g., ?query=avengers). It uses TMDB API via api.js to
-// fetch search results, renders a movie grid with individual genre spans, shows the query in
-// .search-title, and includes pagination with URL updates. It integrates with header.js for
-// consistent navigation.
 
 import { renderHeader } from "../Modules/header.js";
 import {
@@ -101,8 +96,7 @@ async function renderMoviesData(data) {
     moviesSection.appendChild(card);
   });
 
-  // --- FIXED PAGINATION SECTION ---
-  renderPagination(currentPage); // render basic pagination
+  renderPagination(currentPage);
 
   // Adjust pagination links to preserve query
   const paginationContainer = document.querySelector(".pagination");
@@ -136,7 +130,6 @@ async function renderMoviesData(data) {
       };
     }
   }
-  // --- END FIX ---
 }
 
 // Load genres
