@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Finder</title>
+    <link rel="icon" type="image/x-icon" href="../Assets/IMDB_Logo.svg" />
+    <link rel="stylesheet" href="../Styles/common.css" />
+    <link rel="stylesheet" href="../Styles/detail.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <a href="../index.html">
+          <img src="../Assets/IMDB_Logo.svg" alt="Logo" />
+        </a>
+      </div>
+      <div class="search-container">
+        <div class="search-inner">
+          <input type="text" class="search-bar" placeholder="Search..." />
+          <button class="search-button">
+            <img src="../Assets/search.png" alt="Search" />
+          </button>
+          <div class="autocomplete-suggestions"></div>
+        </div>
+        <div class="search-error">Please enter at least 2 characters</div>
+      </div>
+      <div class="dropdown">
+        <button class="dropdown-button">Genres &#x25BC;</button>
+        <div class="dropdown-menu"></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1 class="title"></h1>
+      </section>
+
+      <section class="info-wrapper">
+        <span class="release-date"></span>
+        <div class="rating-wrapper">
+          <img src="../Assets/star-symbol-icon.svg" alt="star" />
+          <span class="rating"></span>
+        </div>
+      </section>
+
+      <section class="detail">
+        <figure class="poster">
+          <img src="../Assets/profile.png" alt="Poster" />
+        </figure>
+        <div class="detail-inner">
+          <div class="genre-wrap">
+            <span class="reference">Genres</span>
+            <div class="movie-genres"></div>
+          </div>
+
+          <div class="overview">
+            <span class="reference">Plot</span>
+            <div class="in-wrap">
+              <p class="overview-text"></p>
+            </div>
+          </div>
+
+          <div class="directior">
+            <span class="reference">Director</span>
+            <div class="in-wrap">
+              <span class="director-name"></span>
+            </div>
+          </div>
+
+          <div class="stars">
+            <span class="overview">Stars</span>
+            <div class="in-wrap"></div>
+          </div>
+
+          <div class="pictures"></div>
+        </div>
+      </section>
+
+      <section class="cast">
+        <div class="cast-header">
+          <span class="bullet">&bull;</span>
+          <h2>Cast</h2>
+        </div>
+        <div class="cast-pic-wrapper"></div>
+      </section>
+    </main>
+
+    <footer>&copy; 2025 by Kaaryar Studio</footer>
+    <script type="module" src="../Scripts/Pages/detail.js"></script>
+  </body>
+</html>
