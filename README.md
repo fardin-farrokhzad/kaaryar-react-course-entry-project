@@ -31,7 +31,7 @@ It’s a **Movie Finder web app** built entirely with **Vanilla JavaScript** and
 
 ## ⚠️ Important Note for Users in Iran
 
-The TMDB image CDN may be blocked for Iranian IP addresses.  
+The TMDB CDN is blocked for Iranian IP addresses.  
 ***We recommend using a VPN when visiting the website from Iran*** to ensure images load correctly and a smooth experience.
 
 ---
