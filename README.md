@@ -38,4 +38,4 @@ The TMDB image CDN may be blocked for Iranian IP addresses.
 ## 🚀 Live Demo
 
 You can try the live version here:  
-[**https://friendly-bublanina-b7b1d4.netlify.app/**](#)
+[**https://friendly-bublanina-b7b1d4.netlify.app/**]
