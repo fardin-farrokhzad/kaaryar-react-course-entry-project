@@ -90,13 +90,13 @@ header {
 .search-error {
   color: #ff4d4d;
   font-size: 0.9rem;
-  padding-top: 15px;
   min-height: 1rem;
-  visibility: hidden;
+  /* visibility: hidden; */
+  display: none;
 }
 
 .search-error.show {
-  visibility: visible;
+  display: block;
 }
 
 .autocomplete-suggestions {
@@ -317,6 +317,7 @@ footer {
 }
 
 .pagination {
+  flex-wrap: wrap;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -346,6 +347,7 @@ footer {
 .page-numbers {
   display: flex;
   gap: 0.8rem;
+  flex-wrap: wrap;
 }
 .pagination .page-btn {
   padding: 6px 10px;
