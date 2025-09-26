@@ -32,6 +32,18 @@ export async function searchMovies(query, page = 1) {
     throw error;
   }
 }
+export async function fetchGenre(genreId, page = 1) {
+  try {
+    const res = await fetch(
+      `${baseUrl}/discover/movie?with_genres=${genreId}&language=en-US&page=${page}&api_key=${apiKey}`
+    );
+    if (!res.ok) throw new Error(`fetchGenre failed: HTTP ${res.status}`);
+    return await res.json();
+  } catch (error) {
+    console.error(`fetchGenre error (query: ${query}, page ${page}):`, error);
+    throw error;
+  }
+}
 
 // Fetch movie details by ID
 export async function findById(movieId) {
