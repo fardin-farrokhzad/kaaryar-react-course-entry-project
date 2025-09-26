@@ -119,6 +119,7 @@ header {
   display: flex;
   gap: 20px;
   transition: 0.5s ease;
+  cursor: pointer;
 }
 .autocomplete-suggestions > * :hover {
   opacity: 0.8;
